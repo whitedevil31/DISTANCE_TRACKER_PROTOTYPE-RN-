@@ -4,6 +4,8 @@ import trackerApi from "../api/Tracker";
 import { AsyncStorage } from "react-native";
 const authReducer = (state, action) => {
   switch (action.type) {
+    case "add_error":
+      return { ...state, errorMessage: action.payload };
     default:
       return state;
   }
@@ -18,7 +20,7 @@ const signup = (dispatch) => {
       });
       console.log(response.data);
     } catch (err) {
-      console.log(err);
+      dispatch({ type: "add_err", payload: "something went wrong" });
     }
   };
 };
@@ -34,5 +36,5 @@ const SignOut = (dispatch) => {
 export const { Context, Provider } = CreateDataContext(
   authReducer,
   { signup },
-  { token: null, errormessage: "" }
+  { token: null, errorMessage: "" }
 );
