@@ -30,7 +30,9 @@ const App = createAppContainer(switchNavigator);
 export default () => {
   return (
     <AuthProvider>
-      <App />
+      <App ref={(navigator) => {
+          setNavigator(navigator);
+        }}/>
     </AuthProvider>
   );
 };
