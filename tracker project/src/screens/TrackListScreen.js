@@ -8,7 +8,13 @@ const TrackListScreen = ({ navigation }) => {
         title="go to details"
         onPress={() => navigation.navigate("trackDetail")}
       />
-      <Text>hello</Text>
+      <View style={{ marginTop: 30 }}>
+        <Button
+          title="go back to sign up"
+          onPress={() => navigation.navigate("signUp")}
+        />
+        <Text>hello</Text>
+      </View>
     </>
   );
 };

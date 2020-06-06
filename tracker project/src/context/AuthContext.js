@@ -9,12 +9,27 @@ const authReducer = (state, action) => {
       return { ...state, errorMessage: action.payload };
     case "signin":
       return { errorMessage: "", token: action.payload };
-
+    case "clearError":
+      return { ...state, errorMessage: "" };
+    case "signout":
+      return { token: null, errorMessage: "" };
     default:
       return state;
   }
 };
+const localSignin = (dispatch) => async () => {
+  const token = await AsyncStorage.getItem("token");
+  if (token) {
+    dispatch({ type: "signin", payload: token });
+    navigate("trackList");
+  } else {
+    navigate("signUp");
+  }
+};
 
+const clearErrorMessage = (dispatch) => () => {
+  dispatch({ type: "clearError" });
+};
 const signup = (dispatch) => {
   return async ({ email, password }) => {
     try {
@@ -24,9 +39,12 @@ const signup = (dispatch) => {
       });
       await AsyncStorage.setItem("token", response.data.token);
       dispatch({ type: "signin", payload: response.data.token });
-      navigate("mainFlow");
+      navigate("trackList");
     } catch (err) {
-      dispatch({ type: "add_err", payload: "something went wrong" });
+      dispatch({
+        type: "add_err",
+        payload: "something went wrong with sign up",
+      });
     }
   };
 };
@@ -37,7 +55,7 @@ const signin = (dispatch) => {
       const response = await trackerApi.post("/signin", { email, password });
       await AsyncStorage.setItem("token", response.data.token);
       dispatch({ type: "signin", payload: response.data.token });
-      navigate("mainFlow");
+      navigate("trackList");
     } catch (err) {
       dispatch({
         type: "add_error",
@@ -47,12 +65,14 @@ const signin = (dispatch) => {
   };
 };
 
-const SignOut = (dispatch) => {
-  return () => {};
+const signout = (dispatch) => async () => {
+  await AsyncStorage.removeItem("token");
+  dispatch({ type: "signout" });
+  navigate("signUp");
 };
 
 export const { Context, Provider } = CreateDataContext(
   authReducer,
-  { signup, signin },
+  { signup, signin, clearErrorMessage, localSignin, signout },
   { token: null, errorMessage: "" }
 );
