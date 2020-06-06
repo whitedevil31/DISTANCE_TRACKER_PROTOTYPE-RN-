@@ -6,13 +6,14 @@ import Spacer from "../components/Spacer";
 
 const AccountScreen = () => {
   const { signout } = useContext(Context);
-  return;
-  <>
-    <Spacer />
-    <Text h3>Account screen</Text>
-    <Spacer />
-    <Button title="Sign out" onPress={signout} />
-  </>;
+  return (
+    <>
+      <Spacer />
+      <Text h3>Account screen</Text>
+      <Spacer />
+      <Button title="Sign out" onPress={signout} />
+    </>
+  );
 };
 
 const styles = StyleSheet.create({});
